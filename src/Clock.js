@@ -1,24 +1,26 @@
 import { useState, useEffect } from "react"
 
 export default function Clock() {
-    const [hour, setHour] = useState(0)
-    const [minute, setMinute] = useState(0)
-    const [second, setSecond] = useState(0)
     const [now, setNow] = useState(new Date())
+    const [hour, setHour] = useState(now.getHours())
+    const [minute, setMinute] = useState(now.getMinutes())
+    const [second, setSecond] = useState(now.getSeconds())
     const [intervalHolder, setIntervalHolder] = useState(null)
 
     useEffect(() => {
-        let newInterval = setInterval(updateTime, 1000)
-        setIntervalHolder(newInterval)
-        return clearInterval(intervalHolder)
-    }, [second])
+        const updateTime = () => {
+            setNow(new Date())
+            setHour(now.getHours())
+            setMinute(now.getMinutes())
+            setSecond(now.getSeconds())
+        }
 
-    const updateTime = () => {
-        setNow(new Date())
-        setHour(now.getHours())
-        setMinute(now.getMinutes())
-        setSecond(now.getSeconds())
-    }
+        let newInterval = setInterval(updateTime, 1000)
+
+        setIntervalHolder(newInterval)
+
+        return clearInterval(intervalHolder)
+    }, [second, intervalHolder, now])
 
     return (
         <div id="clock">
